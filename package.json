@@ -27,10 +27,16 @@
     "webpack-dev-server": "^2.0.0"
   },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.1.9",
+    "apollo-client": "^2.2.5",
+    "apollo-link-http": "^1.5.2",
     "babel-polyfill": "^6.26.0",
     "cross-fetch": "^1.1.1",
+    "graphql": "^0.13.1",
+    "graphql-tag": "^2.8.0",
     "prop-types": "^15.5.10",
     "react": "^15.5.0",
+    "react-apollo": "^2.0.4",
     "react-dom": "^15.5.0",
     "react-router-dom": "^4.2.2",
     "react-transition-group": "^1.2.0"
