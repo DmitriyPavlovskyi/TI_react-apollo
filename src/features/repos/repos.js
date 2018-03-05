@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-const viewerQuery = gql`query{
+const reposQuery = gql`query{
     user(login: "gaearon"){
         repositories(first: 50){
             nodes{
                 name
+                id
             }
             pageInfo{
                 hasNextPage
@@ -25,7 +26,7 @@ class Repos extends Component {
   render() {
     let data = this.props.data.user;
     let test = data ? data.repositories.nodes.map(repo =>
-      <div key = {repo.name} onClick={this.showPRs}>{repo.name}
+      <div key = {repo.id} onClick={this.showPRs.bind(this, repo.name)}>{repo.name}
         <button>Star</button>
       </div>) : null;
     return (
@@ -36,9 +37,10 @@ class Repos extends Component {
     );
   }
 
-  showPRs() {
+  showPRs(ev) {
+    this.props.togglePRs(ev);
     console.log('---PRs requested');
   }
 }
 
-export default graphql(viewerQuery)(Repos);
+export default graphql(reposQuery)(Repos);
