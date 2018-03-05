@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+// import {commitMutation, createFragmentContainer, graphql} from 'react-relay';
 import { Link } from 'react-router-dom';
 
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 
-const reposQuery = gql`query{
+const reposQuery = gql`
+  query {
     user(login: "gaearon"){
         repositories(first: 50){
             nodes{
@@ -20,21 +21,44 @@ const reposQuery = gql`query{
       }
 }`;
 
+const starMutation = gql`
+  mutation {
+    addStar(input: {starrableId: "MDEwOlJlcG9zaXRvcnk1Mzg1MzI0Mg=="}) {
+      starrable {
+        id
+        __typename
+      }
+    }
+}`;
+// https://github.com/github/github-graphql-relay-example/blob/master/src/RepositoryStar.js
 class Repos extends Component {
   static propTypes = {
 
   };
 
   render() {
+    debugger
+    const { data: { loading, error, todos } } = this.props;
     let data = this.props.data.user;
-    let test = data ? data.repositories.nodes.map(repo =>
-      <Link to={`/pr/${repo.name}`} key = {repo.id}><div onClick={this.showPRs.bind(this, repo.name)}>{repo.name}
-        <button>Star</button>
-      </div></Link>) : null;
+    let repoLIst = null;
+
+    if (loading) {
+      return <p>Loading...</p>;
+    } else if (error) {
+      return <p>Error!</p>;
+    } else {
+     repoLIst = data ? data.repositories.nodes.map(repo =>
+      <div>
+        <Link to={`/pr/${repo.name}`} key = {repo.id}>
+          <div onClick={this.showPRs.bind(this, repo.name)}>{repo.name}</div>
+        </Link>
+        <button onCLick={this.toggleStar.bind(null, repo.id)}>Star</button>
+      </div>) : null;
+    }
     return (
       <div>
         <h2>Repositories:</h2>
-        {test}
+        {repoLIst}
       </div>
     );
   }
@@ -43,6 +67,16 @@ class Repos extends Component {
     this.props.togglePRs(prs);
     console.log('---PRs requested');
   }
+
+  toggleStar() {debuger
+    // this.starMutation(repository.id);
+    console.log('---Star toggled');
+    // this.commitMutation()
+  }
 }
+// export default compose(
+//   graphql(reposQuery, { name: 'reposQuery' }),
+//   graphql(starMutation, { name: 'starMutation' }),
+// )(Repos)
 
 export default graphql(reposQuery)(Repos);

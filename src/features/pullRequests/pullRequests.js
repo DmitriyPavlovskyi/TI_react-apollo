@@ -8,8 +8,9 @@ import { Link } from 'react-router-dom';
 
 const test = 'redux-thunk';
 
-const prsQuery = gql`query{
-  repository(owner: "gaearon", name: "${test}") {
+const prsQuery = gql`
+  query prsQuery($repoName: String!) {
+  repository(owner: "gaearon", name: $repoName) {
     pullRequests(first: 100, states: OPEN) {
       edges {
         node {
@@ -39,7 +40,16 @@ class PRs extends Component {
 
   render() {
     const data = this.props.data.repository;
-    const prs = data ? data.pullRequests.edges.map(pr => <div key = {pr.node.id}>{pr.node.title}</div>) : null;
+    const { data: { loading, error, todos } } = this.props;
+    let prs = null;
+
+    if (loading) {
+      return <p>Loading...</p>;
+    } else if (error) {
+      return <p>Error!</p>;
+    } else {
+      prs = data ? data.pullRequests.edges.map(pr => <div key = {pr.node.id}>{pr.node.title}</div>) : null;
+    }
     return (
       <div>
         <Link to="/">Back</Link>
@@ -49,4 +59,4 @@ class PRs extends Component {
   }
 }
 
-export default graphql(prsQuery)(PRs);
+export default graphql(prsQuery, {options: { variables: { repoName: 'redux-thunk'}}})(PRs);
