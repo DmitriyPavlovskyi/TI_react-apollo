@@ -10,7 +10,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 
-const accessToken = 'f839373b677390ba6780f3deafbf4d20ca4995eb';// insert your github auth token
+const accessToken = '3bd1378cac6c8387a3e97ade463fa72364c976d2';// insert your github auth token
 
 const client = new ApolloClient({
   link: new HttpLink({ uri: 'https://api.github.com/graphql', headers: { authorization: `bearer ${accessToken}` } }),
