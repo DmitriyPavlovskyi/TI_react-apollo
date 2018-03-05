@@ -8,7 +8,9 @@ import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
-const accessToken = '001fd391f936c4261e2fa9a83dc155037f3d8cfc';// insert your github auth token
+import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+
+const accessToken = 'f839373b677390ba6780f3deafbf4d20ca4995eb';// insert your github auth token
 
 const client = new ApolloClient({
   link: new HttpLink({ uri: 'https://api.github.com/graphql', headers: { authorization: `bearer ${accessToken}` } }),
@@ -28,17 +30,24 @@ class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <div>
-          <Repos togglePRs={this.togglePRs}/>
-          {this.state.isPRshowing ? <PRs activePR={this.state.activePR}/> : null}
-        </div>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path='/' render={() => (
+              <Repos togglePRs={this.togglePRs}/>
+            )}/>
+            <Route path={`/pr/${this.state.activePR}`} render={() => (
+              <PRs togglePRs={this.togglePRs}/>
+            )}/>
+          </Switch>
+        </BrowserRouter>
       </ApolloProvider>
     );
   }
 
-  togglePRs = () => {
+  togglePRs = (pr) => {
     return this.setState({
-      isPRshowing: !this.state.isPRshowing
+      isPRshowing: !this.state.isPRshowing,
+      activePR: pr
     });
   }
 }

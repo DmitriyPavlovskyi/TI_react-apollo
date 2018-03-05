@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import { Link } from 'react-router-dom';
+
 const test = 'redux-thunk';
 
 const prsQuery = gql`query{
@@ -37,10 +39,10 @@ class PRs extends Component {
 
   render() {
     const data = this.props.data.repository;
-    debugger
     const prs = data ? data.pullRequests.edges.map(pr => <div key = {pr.node.id}>{pr.node.title}</div>) : null;
     return (
       <div>
+        <Link to="/">Back</Link>
         {prs}
       </div>
     );

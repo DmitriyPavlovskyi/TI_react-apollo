@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { Link } from 'react-router-dom';
+
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -26,9 +28,9 @@ class Repos extends Component {
   render() {
     let data = this.props.data.user;
     let test = data ? data.repositories.nodes.map(repo =>
-      <div key = {repo.id} onClick={this.showPRs.bind(this, repo.name)}>{repo.name}
+      <Link to={`/pr/${repo.name}`} key = {repo.id}><div onClick={this.showPRs.bind(this, repo.name)}>{repo.name}
         <button>Star</button>
-      </div>) : null;
+      </div></Link>) : null;
     return (
       <div>
         <h2>Repositories:</h2>
@@ -37,8 +39,8 @@ class Repos extends Component {
     );
   }
 
-  showPRs(ev) {
-    this.props.togglePRs(ev);
+  showPRs(prs) {
+    this.props.togglePRs(prs);
     console.log('---PRs requested');
   }
 }
