@@ -6,9 +6,10 @@ import { Link } from 'react-router-dom';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 
-const reposQuery = gql`
-  query {
-    user(login: "gaearon"){
+const login = "DmitriyPavlovskyi";
+
+const reposQuery = gql`query{
+    user(login: "DmitriyPavlovskyi"){
         repositories(first: 50){
             nodes{
                 name
@@ -20,24 +21,21 @@ const reposQuery = gql`
         }
       }
 }`;
-
-const starMutation = gql`
-  mutation {
-    addStar(input: {starrableId: "MDEwOlJlcG9zaXRvcnk1Mzg1MzI0Mg=="}) {
-      starrable {
-        id
-        __typename
-      }
-    }
-}`;
 // https://github.com/github/github-graphql-relay-example/blob/master/src/RepositoryStar.js
+const starQuery = gql`mutation($clientId: String!, $repoId: ID!) {
+  addStar(input: {
+    clientMutationId: $clientId,
+    starrableId: $repoId}) {
+    clientMutationId
+  }
+}`;
+
 class Repos extends Component {
   static propTypes = {
 
   };
 
   render() {
-    debugger
     const { data: { loading, error, todos } } = this.props;
     let data = this.props.data.user;
     let repoLIst = null;
@@ -52,7 +50,7 @@ class Repos extends Component {
         <Link to={`/pr/${repo.name}`} key = {repo.id}>
           <div onClick={this.showPRs.bind(this, repo.name)}>{repo.name}</div>
         </Link>
-        <button onCLick={this.toggleStar.bind(null, repo.id)}>Star</button>
+        <button onClick={this.star.bind(this, repo.clientId, repo.id)}>Star</button>
       </div>) : null;
     }
     return (
@@ -68,15 +66,15 @@ class Repos extends Component {
     console.log('---PRs requested');
   }
 
-  toggleStar() {debuger
-    // this.starMutation(repository.id);
-    console.log('---Star toggled');
-    // this.commitMutation()
+  toggleStar() {
+    console.log('---Star toggled');}
+  star(clientId, repoId) {
+    debugger;
+    this.props.addStar({variables: { clientId: login, repoId}});
   }
 }
-// export default compose(
-//   graphql(reposQuery, { name: 'reposQuery' }),
-//   graphql(starMutation, { name: 'starMutation' }),
-// )(Repos)
-
-export default graphql(reposQuery)(Repos);
+export default compose(
+  graphql(reposQuery),
+  graphql(starQuery, { name: 'addStar'}),
+  // graphql(starMutation, { name: 'starMutation' }),
+)(Repos)

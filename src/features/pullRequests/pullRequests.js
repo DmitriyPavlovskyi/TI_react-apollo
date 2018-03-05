@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-
 import { Link } from 'react-router-dom';
-
-const test = 'redux-thunk';
 
 const prsQuery = gql`
   query prsQuery($repoName: String!) {
@@ -52,6 +49,7 @@ class PRs extends Component {
     }
     return (
       <div>
+        <h2>Pull requests:</h2>
         <Link to="/">Back</Link>
         {prs}
       </div>
