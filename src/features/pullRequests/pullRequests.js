@@ -11,8 +11,8 @@ class PRs extends Component {
   };
 
   render() {
+    const { data: { loading, error } } = this.props;
     const data = this.props.data.repository;
-    const { data: { loading, error, todos } } = this.props;
     let prs = null;
 
     if (loading) {
@@ -26,7 +26,7 @@ class PRs extends Component {
       <div>
         <h2>Pull requests:</h2>
         <Link to="/">Back</Link>
-        {prs}
+        {prs.length > 0 ? prs : <h5>There is no open pull requests</h5>}
       </div>
     );
   }

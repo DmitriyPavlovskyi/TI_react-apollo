@@ -27,10 +27,11 @@ export const prsQuery = gql`
 
 export const config = {
   options: ({ repoName }) => {
-  return {
-    variables: {
-      repoName,
-      owner: 'DmitriyPavlovskyi'
-    }
-  }}
+    return {
+      variables: {
+        repoName,
+        owner: 'DmitriyPavlovskyi'
+      }
+    };
+  }
 };

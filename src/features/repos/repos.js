@@ -8,7 +8,6 @@ const login = 'DmitriyPavlovskyi';
 
 class Repos extends Component {
   static propTypes = {
-
   };
 
   render() {
@@ -45,11 +44,14 @@ class Repos extends Component {
 
   addRepoStar(clientId, repoId) {
     this.props.addStar({variables: { clientId: login, repoId}});
+    console.log('---Repository starred');
   }
   removeRepoStar(clientId, repoId) {
     this.props.removeStar({variables: { clientId: login, repoId}});
+    console.log('---Repository unstarred');
   }
 }
+
 export default compose(
   graphql(reposQuery),
   graphql(starQuery, { name: 'addStar'}),
