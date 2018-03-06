@@ -1,34 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { prsQuery, config } from './gqlConfig';
 
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
-
-const prsQuery = gql`
-  query prsQuery($repoName: String!) {
-  repository(owner: "gaearon", name: $repoName) {
-    pullRequests(first: 100, states: OPEN) {
-      edges {
-        node {
-          title
-          headRefName
-          commits (first:100) {
-            totalCount
-            edges {
-              node {
-                commit {
-                  message
-                }
-                id
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}`;
 
 class PRs extends Component {
   static propTypes = {
@@ -57,4 +32,4 @@ class PRs extends Component {
   }
 }
 
-export default graphql(prsQuery, {options: { variables: { repoName: 'redux-thunk'}}})(PRs);
+export default graphql(prsQuery, config)(PRs);

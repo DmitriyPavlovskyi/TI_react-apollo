@@ -1,34 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import {commitMutation, createFragmentContainer, graphql} from 'react-relay';
 import { Link } from 'react-router-dom';
-
+import { reposQuery, starQuery, unStarQuery } from './gqlConfig';
 import { graphql, compose } from 'react-apollo';
-import gql from 'graphql-tag';
 
-const login = "DmitriyPavlovskyi";
-
-const reposQuery = gql`query{
-    user(login: "DmitriyPavlovskyi"){
-        repositories(first: 50){
-            nodes{
-                name
-                id
-            }
-            pageInfo{
-                hasNextPage
-            }
-        }
-      }
-}`;
-// https://github.com/github/github-graphql-relay-example/blob/master/src/RepositoryStar.js
-const starQuery = gql`mutation($clientId: String!, $repoId: ID!) {
-  addStar(input: {
-    clientMutationId: $clientId,
-    starrableId: $repoId}) {
-    clientMutationId
-  }
-}`;
+const login = 'DmitriyPavlovskyi';
 
 class Repos extends Component {
   static propTypes = {
@@ -36,7 +12,7 @@ class Repos extends Component {
   };
 
   render() {
-    const { data: { loading, error, todos } } = this.props;
+    const { data: { loading, error } } = this.props;
     let data = this.props.data.user;
     let repoLIst = null;
 
@@ -45,13 +21,14 @@ class Repos extends Component {
     } else if (error) {
       return <p>Error!</p>;
     } else {
-     repoLIst = data ? data.repositories.nodes.map(repo =>
-      <div>
-        <Link to={`/pr/${repo.name}`} key = {repo.id}>
-          <div onClick={this.showPRs.bind(this, repo.name)}>{repo.name}</div>
-        </Link>
-        <button onClick={this.star.bind(this, repo.clientId, repo.id)}>Star</button>
-      </div>) : null;
+      repoLIst = data ? data.repositories.nodes.map(repo =>
+        <div key = {repo.id}>
+          <Link to={`/pr/${repo.name}`}>
+            <div onClick={this.showPRs.bind(this, repo.name)}>{repo.name}</div>
+          </Link>
+          <button onClick={this.addRepoStar.bind(this, repo.clientId, repo.id)}>Star</button>
+          <button onClick={this.removeRepoStar.bind(this, repo.clientId, repo.id)}>UnStar</button>
+        </div>) : null;
     }
     return (
       <div>
@@ -66,15 +43,15 @@ class Repos extends Component {
     console.log('---PRs requested');
   }
 
-  toggleStar() {
-    console.log('---Star toggled');}
-  star(clientId, repoId) {
-    debugger;
+  addRepoStar(clientId, repoId) {
     this.props.addStar({variables: { clientId: login, repoId}});
+  }
+  removeRepoStar(clientId, repoId) {
+    this.props.removeStar({variables: { clientId: login, repoId}});
   }
 }
 export default compose(
   graphql(reposQuery),
   graphql(starQuery, { name: 'addStar'}),
-  // graphql(starMutation, { name: 'starMutation' }),
-)(Repos)
+  graphql(unStarQuery, { name: 'removeStar'})
+)(Repos);
