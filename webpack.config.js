@@ -10,12 +10,6 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/static/'
   },
-  devServer: {
-    proxy: [{
-      path: '/api/',
-      target: 'http://localhost:3001'
-    }]
-  },
   module: {
     loaders: [
       {
@@ -26,6 +20,16 @@ module.exports = {
       {
         test: /\.css/,
         loaders: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'graphql-tag/loader',
+          options: {
+            baseDir: path.resolve(`${__dirname}/../src/graphql`)
+          }
+        }
       }
     ]
   }

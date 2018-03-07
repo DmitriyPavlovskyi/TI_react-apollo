@@ -5,12 +5,12 @@ import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import Repos from '../features/repos/repos';
-import PRs from '../features/pullRequests/pullRequests';
+import Repos from '../features/repos/index';
+import PRs from '../features/pullRequests/index';
 import './App.css';
 
 // insert your github auth token
-const accessToken = '4fc797f805c9d3d585905ffb1ceac78ef7642bd8';
+const accessToken = 'a5e06dc7710ec0c9cdc7b9fafb405937fe86d6b8';
 
 const client = new ApolloClient({
   link: new HttpLink({ uri: 'https://api.github.com/graphql', headers: { authorization: `bearer ${accessToken}` } }),
@@ -35,10 +35,10 @@ class App extends Component {
             <Route exact path='/' render={() => (
               <Repos togglePRs={this.togglePRs}/>
             )}/>
-            <Route path={`/pr/${this.state.activePR}`} render={() => (
+            <Route path='/pr/:prId' render={() => (
               <PRs
                 repoName={this.state.activePR}
-                togglePRs={this.togglePRs}
+                togglePRs={this.togglePRs.bind(this)}
               />
             )}/>
           </Switch>

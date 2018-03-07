@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { prsQuery, config } from './gqlConfig';
+import { prsQuery } from './queries/pullRequests';
 
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
+
+const config = {
+  options: ({ repoName }) => {
+    return {
+      variables: {
+        repoName,
+        owner: 'DmitriyPavlovskyi'
+      }
+    };
+  }
+};
 
 class PRs extends Component {
   static propTypes = {

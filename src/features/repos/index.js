@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { reposQuery, starQuery, unStarQuery } from './gqlConfig';
 import { graphql, compose } from 'react-apollo';
+
+import Repositories from './components/repositories';
+
+// import test from './queries/repositories.graphql';
+
+// queries
+import { reposQuery } from './queries/repositories';
+import { starQuery } from './queries/star';
+import { unStarQuery } from './queries/unStar';
+
+// console.log(test);
 
 const login = 'DmitriyPavlovskyi';
 
@@ -20,14 +30,12 @@ class Repos extends Component {
     } else if (error) {
       return <p>Error!</p>;
     } else {
-      repoLIst = data ? data.repositories.nodes.map(repo =>
-        <div key = {repo.id}>
-          <Link to={`/pr/${repo.name}`}>
-            <div onClick={this.showPRs.bind(this, repo.name)}>{repo.name}</div>
-          </Link>
-          <button onClick={this.addRepoStar.bind(this, repo.clientId, repo.id)}>Star</button>
-          <button onClick={this.removeRepoStar.bind(this, repo.clientId, repo.id)}>UnStar</button>
-        </div>) : null;
+      repoLIst = data ? <Repositories
+      repos = {data.repositories.nodes}
+      showPRs = {this.showPRs.bind(this)}
+      addRepoStar = {this.addRepoStar.bind(this)}
+      removeRepoStar = {this.removeRepoStar.bind(this)}
+      /> : null;
     }
     return (
       <div>
@@ -37,7 +45,7 @@ class Repos extends Component {
     );
   }
 
-  showPRs(prs) {
+  showPRs = (prs) => {
     this.props.togglePRs(prs);
     console.log('---PRs requested');
   }
