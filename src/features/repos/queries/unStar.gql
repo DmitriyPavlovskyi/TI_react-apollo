@@ -1,0 +1,7 @@
+mutation unStarQuery($clientId: String!, $repoId: ID!) {
+  removeStar(input: {
+    clientMutationId: $clientId,
+    starrableId: $repoId}) {
+    clientMutationId
+  }
+}

@@ -3,11 +3,15 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Router, Switch, Route, HashRouter } from 'react-router-dom';
 
 import Repos from '../features/repos/index';
 import PRs from '../features/pullRequests/index';
 import './App.css';
+
+import createHistory from 'history/createBrowserHistory';
+
+const history = createHistory();
 
 // insert your github auth token
 const accessToken = 'a5e06dc7710ec0c9cdc7b9fafb405937fe86d6b8';
@@ -30,7 +34,7 @@ class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <BrowserRouter>
+        <HashRouter>
           <Switch>
             <Route exact path='/' render={() => (
               <Repos togglePRs={this.togglePRs}/>
@@ -42,7 +46,7 @@ class App extends Component {
               />
             )}/>
           </Switch>
-        </BrowserRouter>
+        </HashRouter>
       </ApolloProvider>
     );
   }

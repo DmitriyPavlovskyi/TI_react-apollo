@@ -1,6 +1,4 @@
-import gql from 'graphql-tag';
-
-export const reposQuery = gql`query{
+query reposQuery {
     user(login: "DmitriyPavlovskyi"){
         repositories(first: 50){
             nodes{
@@ -12,4 +10,4 @@ export const reposQuery = gql`query{
             }
         }
       }
-}`;
+}

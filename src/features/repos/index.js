@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { graphql, compose } from 'react-apollo';
 
 import Repositories from './components/repositories';
 
-// import test from './queries/repositories.graphql';
-
 // queries
-import { reposQuery } from './queries/repositories';
-import { starQuery } from './queries/star';
-import { unStarQuery } from './queries/unStar';
-
-// console.log(test);
+import { reposQuery } from './queries/repositories.gql';
+import { starQuery } from './queries/star.gql';
+import { unStarQuery } from './queries/unStar.gql';
 
 const login = 'DmitriyPavlovskyi';
 
 class Repos extends Component {
   static propTypes = {
+    togglePRs: PropTypes.func,
+    addStar: PropTypes.func,
+    removeStar: PropTypes.func,
+    data: PropTypes.object
   };
 
   render() {
@@ -27,16 +26,17 @@ class Repos extends Component {
 
     if (loading) {
       return <p>Loading...</p>;
-    } else if (error) {
+    }
+    if (error) {
       return <p>Error!</p>;
-    } else {
-      repoLIst = data ? <Repositories
+    }
+    repoLIst = data ? (<Repositories
       repos = {data.repositories.nodes}
       showPRs = {this.showPRs.bind(this)}
       addRepoStar = {this.addRepoStar.bind(this)}
       removeRepoStar = {this.removeRepoStar.bind(this)}
-      /> : null;
-    }
+    />) : null;
+
     return (
       <div>
         <h2>Repositories:</h2>

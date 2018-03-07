@@ -1,10 +1,13 @@
-var path = require('path');
+let path = require('path');
 
 module.exports = {
   devtool: 'source-map',
   entry: [
     './src/index.js'
   ],
+  devServer: {
+    historyApiFallback: true
+  },
   output: {
     path: path.join(__dirname, 'build'),
     filename: 'bundle.js',

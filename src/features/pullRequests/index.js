@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { prsQuery } from './queries/pullRequests';
+import { prsQuery } from './queries/pullRequests.gql';
 
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
@@ -18,7 +18,7 @@ const config = {
 
 class PRs extends Component {
   static propTypes = {
-
+    data: PropTypes.object
   };
 
   render() {
@@ -28,11 +28,14 @@ class PRs extends Component {
 
     if (loading) {
       return <p>Loading...</p>;
-    } else if (error) {
-      return <p>Error!</p>;
-    } else {
-      prs = data ? data.pullRequests.edges.map(pr => <div key = {pr.node.id}>{pr.node.title}</div>) : null;
     }
+    if (error) {
+      return <p>Error!</p>;
+    }
+    prs = data ?
+      data.pullRequests.edges.map(pr => <div key = {pr.node.id}>{pr.node.title}</div>)
+      : null;
+
     return (
       <div>
         <h2>Pull requests:</h2>
