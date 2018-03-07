@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { prsQuery } from './queries/pullRequests.gql';
 
@@ -6,7 +7,8 @@ import { graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
 
 const config = {
-  options: ({ repoName }) => {
+  options: (props) => {
+    const repoName = props.match.params.prId;
     return {
       variables: {
         repoName,
@@ -46,4 +48,4 @@ class PRs extends Component {
   }
 }
 
-export default graphql(prsQuery, config)(PRs);
+export default withRouter(graphql(prsQuery, config)(PRs));

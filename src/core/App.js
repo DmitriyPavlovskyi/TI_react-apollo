@@ -40,10 +40,7 @@ class App extends Component {
               <Repos togglePRs={this.togglePRs}/>
             )}/>
             <Route path='/pr/:prId' render={() => (
-              <PRs
-                repoName={this.state.activePR}
-                togglePRs={this.togglePRs.bind(this)}
-              />
+              <PRs togglePRs={this.togglePRs.bind(this)} />
             )}/>
           </Switch>
         </HashRouter>
